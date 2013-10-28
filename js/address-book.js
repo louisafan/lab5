@@ -2,6 +2,41 @@
     this is where you will add your JavaScript to complete Lab 5
 */
 
+function render(entries) {
+    var $template = $('.template');
+    var $addressBook = $('.address-book');
+    $addressBook.hide();
+    $addressBook.empty();
+    var $instance;
+
+    // asdkllll can't get for-loop to work: for (var i = 0; i < entries.length; i++) {
+     $.each(entries, function(){
+        $instance = $template.clone();
+        $instance.find('.first').html(this.first);
+        $instance.find('.last').html(this.last);
+        $instance.find('.title').html(this.title);
+        $instance.find('.dept').html(this.dept);
+        $instance.find('.pic').attr({
+            src: this.pic,
+            alt: 'picture of ' + this.first + " " + this.last
+        });
+        $instance.removeClass('template');
+        $addressBook.append($instance);
+    });
+    $addressBook.fadeIn();
+}
+
+$(function(){
+    sortObjArray(Employees.entries, 'last');
+    render(Employees.entries);
+    $('.sort-ui .btn').click(function(){
+        var sortBtn = $(this);
+        sortObjArray(Employees.entries, sortBtn.attr('data-sortby'));
+        render(Employees.entries);
+        $(this).siblings('.active').removeClass('active');
+        $(this).addClass('active');
+    });
+}); // document is ready
 
 /* sortObjArray()
     sorts an array of objects by a given property name
@@ -14,6 +49,7 @@
 
     returns undefined (array is sorted in place)
 */
+
 function sortObjArray(objArray, propName) {
     if (!objArray.sort)
         throw new Error('The objArray parameter does not seem to be an array (no sort method)');
@@ -33,4 +69,3 @@ function sortObjArray(objArray, propName) {
             return 1;
     });
 } //sortObjArray()
-
